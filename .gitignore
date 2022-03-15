@@ -1,0 +1,4 @@
+node_modules
+dist (distribution)
+coverage for test git repo
+.env
