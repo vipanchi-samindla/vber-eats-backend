@@ -34,5 +34,5 @@
 
   ### App Architecture
 
-![Eats App](https://user-images.githubusercontent.com/54975573/158727388-6c710a39-9c34-49c1-af91-c2fc016e3d94.png)
+![Eats App](https://user-images.githubusercontent.com/54975573/158727665-abb5d003-de81-4267-9210-606e8f708926.png)
 
