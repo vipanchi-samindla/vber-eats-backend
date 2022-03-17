@@ -27,3 +27,12 @@
   
 2. Check if all the required files are formatted.<br>
   `npm run format-check`
+  
+  ### Setup environment variables
+
+1. Rename .env.example to .env and modify the values of the corresponding environment variables.
+
+  ### App Architecture
+
+![Eats App](https://user-images.githubusercontent.com/54975573/158727388-6c710a39-9c34-49c1-af91-c2fc016e3d94.png)
+
