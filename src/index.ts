@@ -1,44 +1,35 @@
-import express, { Application } from 'express';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import bodyParser from 'body-parser';
-import { ApolloServer, gql } from 'apollo-server';
-import express_graphql from 'express-graphql';
-import { buildSchema } from 'graphql';
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
-const app: Application = express();
+import express, { Application } from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import { resolvers, typeDefs } from './graphql';
+import { connectDatabase } from './database';
+
 const port = process.env.PORT;
 
-const schema = buildSchema(`
-    type Query {
-        message: String
-    }
-`);
-// Root resolver
-const root = {
-  message() {
-    console.log('Hello');
-  },
+const mount = async (app: Application) => {
+  const db = await connectDatabase();
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: () => ({ db }),
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  server.start().then(_res => {
+    server.applyMiddleware({ app, path: '/api' });
+  });
+  app.listen(port, () => {
+    // eslint-disable-next-line no-console
+    console.log(`Server started at PORT ${port}`);
+  });
+  const listings = await db.users.find({}).toArray();
+  // eslint-disable-next-line no-console
+  console.log(listings);
+
+  app.get('/', (_req, res) => {
+    res.send('Server Works');
+  });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// const app = new ApolloServer({ typeDefs, resolvers });
-app.use(bodyParser.json());
-
-// app.use(
-//   '/graphql',
-//   express_graphql({
-//     schemaname: schema,
-//     rootValue: root,
-//     graphiql: true,
-//   })
-// );
-// app.get('/', (_req, res) => {
-//   res.send('Server Works');
-// });
-app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Express GraphQL Server Now Running On localhost:${port} /graphql`);
-});
+mount(express());
