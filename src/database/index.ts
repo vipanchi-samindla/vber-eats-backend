@@ -1,5 +1,5 @@
 import { ConnectOptions, MongoClient } from 'mongodb';
-import { Database, User } from '../lib/types';
+import { Database, Restaurant, User } from '../lib/types';
 
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
@@ -16,5 +16,6 @@ export const connectDatabase = async (): Promise<Database> => {
 
   return {
     users: db.collection<User>('users'),
+    restaurants: db.collection<Restaurant>('restaurants'),
   };
 };
